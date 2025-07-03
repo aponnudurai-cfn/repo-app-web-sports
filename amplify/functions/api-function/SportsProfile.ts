@@ -21,6 +21,7 @@ const convertKelvinToFahrenheit = (kelvin: number) =>
 // --- Fetch location ---
 const fetchLocationData = async (latitude: string, longitude: string, apiKey: string) => {
   const url = `${process.env.Location_API_URL}?lat=${latitude}&lon=${longitude}&limit=1&appid=${apiKey}`;
+  console.log(`Location url - ${url}`)
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Location API error: ${response.status}`);
   const data = await response.json();
@@ -30,6 +31,8 @@ const fetchLocationData = async (latitude: string, longitude: string, apiKey: st
 // --- Fetch weather ---
 const fetchWeatherData = async (name: string, state: string, country: string, apiKey: string) => {
   const url = `${process.env.Weather_API_URL}?q=${encodeURIComponent(name)},${encodeURIComponent(state)},${encodeURIComponent(country)}&appid=${apiKey}`;
+  console.log(`Weather url - ${url}`)
+ 
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Weather API error: ${response.status}`);
   return await response.json();
@@ -72,8 +75,7 @@ const handleGetRequest = async (event: APIGatewayProxyEvent) => {
     });
   } catch (err) {
     console.error("Error fetching data:", err);
-    const errorX = `Failed to fetch location or weather data - apiKey ${apiKey}, locationUrl ${locationUrl}, weatherUrl ${weatherUrl},`;
-    return createResponse(500, { error: errorX });
+    return createResponse(500, { error: "Failed to fetch location or weather data" });
   }
 };
 
