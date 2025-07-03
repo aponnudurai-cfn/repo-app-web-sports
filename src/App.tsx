@@ -58,7 +58,7 @@ function App() {
     async function callApi() {
       try {
         const endpoint = outputs.custom.API.SportsPortalApi.endpoint;
-        const path = 'UserPersonalization'; // Adjust the path as needed
+        const path = 'SportsPersonalization'; // Adjust the path as needed
         const response = await fetch(`${endpoint}${path}`, {
           method: "GET",
           headers: {
