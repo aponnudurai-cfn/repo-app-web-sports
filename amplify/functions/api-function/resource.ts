@@ -5,7 +5,7 @@ export const sportsProfile = defineFunction({
   environment: {
     Location_API_URL: secret("Location_API_URL"),
     Weather_API_URL: secret("Weather_API_URL"),
-    WEATHER_API_KEY : secret("Weather_API_KEY"), // Replace with your actual API key
+    Weather_API_KEY : secret("Weather_API_KEY"), // Replace with your actual API key
   }
 }); 
 export const sportsPersonalization = defineFunction({
