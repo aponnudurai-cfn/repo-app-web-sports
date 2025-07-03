@@ -44,7 +44,7 @@ const handleGetRequest = async (event: APIGatewayProxyEvent) => {
     return createResponse(400, { error: "Latitude and longitude are required" });
   }
 
-  const apiKey = process.env.WEATHER_API_KEY;
+  const apiKey = process.env.Weather_API_KEY;
   const locationUrl = process.env.Location_API_URL;
   const weatherUrl = process.env.Weather_API_URL;
   console.log(`apiKey ${apiKey}, locationUrl ${locationUrl}, weatherUrl ${weatherUrl},`);
