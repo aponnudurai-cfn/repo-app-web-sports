@@ -25,7 +25,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       "Access-Control-Allow-Headers": "*", // Specify only the headers you need to allow
       "Access-Control-Allow-Methods": "*",
     },
-    /*body: JSON.stringify("Hello from UserPersonalization[ById][ByEmailAddress] - arulraj joseph!"),*/
+    /*body: JSON.stringify("Hello from SportsPersonalization[ById][ByEmailAddress] - arulraj joseph!"),*/
     body: JSON.stringify(`${greeting}, ${email}!`),
   };
 };

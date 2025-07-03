@@ -8,7 +8,7 @@ import {
   RestApi,
 } from "aws-cdk-lib/aws-apigateway";
 import { Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { userProfile, userPersonalization } from "./functions/api-function/resource";
+import { sportsProfile, sportsPersonalization } from "./functions/api-function/resource";
 import { auth } from "./auth/resource";
 import { data } from "./data/resource";
 import { EndpointType } from "aws-cdk-lib/aws-apigateway";
@@ -17,12 +17,12 @@ import * as apigateway from "aws-cdk-lib/aws-apigateway";
 const backend = defineBackend({
   auth,
   data,
-  userProfile,
-  userPersonalization
+  sportsProfile,
+  sportsPersonalization
 });
 
 // create a new API stack
-const apiStack = backend.createStack("advisor-api-stack");
+const apiStack = backend.createStack("sports-api-stack");
 
 const cognitoAuth = new CognitoUserPoolsAuthorizer(apiStack, "CognitoAuth", {
   cognitoUserPools: [backend.auth.resources.userPool],
@@ -30,8 +30,8 @@ const cognitoAuth = new CognitoUserPoolsAuthorizer(apiStack, "CognitoAuth", {
 
 
 // create a new REST API
-const advisorPortalApi = new RestApi(apiStack, "AdvisorPortalApi", {
-  restApiName: "AdvisorPortalApi",
+const sportsPortalApi = new RestApi(apiStack, "SportsPortalApi", {
+  restApiName: "SportsPortalApi",
   deploy: true,
   deployOptions: {
     stageName: "dev", 
@@ -42,11 +42,11 @@ const advisorPortalApi = new RestApi(apiStack, "AdvisorPortalApi", {
 });
 
 // create a new Lambda integration
-const userProfileIntegration = new LambdaIntegration(
-  backend.userProfile.resources.lambda
+const sportsProfileIntegration = new LambdaIntegration(
+  backend.sportsProfile.resources.lambda
 );
-const userPersonalizationIntegration = new LambdaIntegration(
-  backend.userPersonalization.resources.lambda
+const sportsPersonalizationIntegration = new LambdaIntegration(
+  backend.sportsPersonalization.resources.lambda
 );
 
 const corsOptions = {
@@ -75,14 +75,14 @@ const corsOptions = {
 };
 
 // create a new resource path with IAM authorization
-const userProfileResource = advisorPortalApi.root.addResource("UserProfile", {
+const sportsProfileResource = sportsPortalApi.root.addResource("SportsProfile", {
   defaultMethodOptions: {
     authorizationType: AuthorizationType.COGNITO,
     authorizer: cognitoAuth,
   },
 });
-userProfileResource.addMethod("GET", userProfileIntegration); 
-userProfileResource.addMethod(
+sportsProfileResource.addMethod("GET", sportsProfileIntegration); 
+sportsProfileResource.addMethod(
   "OPTIONS",
   corsOptions.integration, {
     methodResponses: corsOptions.methodResponses,
@@ -90,14 +90,14 @@ userProfileResource.addMethod(
   }
 );
 
-const userPersonalizationResource = advisorPortalApi.root.addResource("UserPersonalization", {
+const sportsPersonalizationResource = sportsPortalApi.root.addResource("SportsPersonalization", {
   defaultMethodOptions: {
     authorizationType: AuthorizationType.COGNITO,
     authorizer: cognitoAuth,
   },
 });
-userPersonalizationResource.addMethod("GET", userPersonalizationIntegration); 
-userPersonalizationResource.addMethod(
+sportsPersonalizationResource.addMethod("GET", sportsPersonalizationIntegration); 
+sportsPersonalizationResource.addMethod(
   "OPTIONS",
   corsOptions.integration, {
     methodResponses: corsOptions.methodResponses,
@@ -106,15 +106,15 @@ userPersonalizationResource.addMethod(
 );
 
 // create a new IAM policy to allow Invoke access to the API
-const advisorApiPolicy = new Policy(apiStack, "AdvisorApiPolicy", {
+const sportsApiPolicy = new Policy(apiStack, "AdvisorApiPolicy", {
   statements: [
     new PolicyStatement({
       actions: ["execute-api:Invoke"],
       resources: [
-        `${advisorPortalApi.arnForExecuteApi("*", "/UserProfile", "dev")}`,
-        `${advisorPortalApi.arnForExecuteApi("*", "/UserProfile/*", "dev")}`,
-        `${advisorPortalApi.arnForExecuteApi("*", "/UserPersonalization", "dev")}`,
-        `${advisorPortalApi.arnForExecuteApi("*", "/UserPersonalization/*", "dev")}`,
+        `${sportsPortalApi.arnForExecuteApi("*", "/SportsProfile", "dev")}`,
+        `${sportsPortalApi.arnForExecuteApi("*", "/SportsProfile/*", "dev")}`,
+        `${sportsPortalApi.arnForExecuteApi("*", "/SportsPersonalization", "dev")}`,
+        `${sportsPortalApi.arnForExecuteApi("*", "/SportsPersonalization/*", "dev")}`,
       ],
     }),
   ],
@@ -122,20 +122,20 @@ const advisorApiPolicy = new Policy(apiStack, "AdvisorApiPolicy", {
 
 // attach the policy to the authenticated and unauthenticated IAM roles
 backend.auth.resources.authenticatedUserIamRole.attachInlinePolicy(
-  advisorApiPolicy
+  sportsApiPolicy
 );
 backend.auth.resources.unauthenticatedUserIamRole.attachInlinePolicy(
-  advisorApiPolicy
+  sportsApiPolicy
 );
 
 // add outputs to the configuration file
 backend.addOutput({
   custom: {
     API: {
-      [advisorPortalApi.restApiName]: {
-        endpoint: advisorPortalApi.url,
-        region: Stack.of(advisorPortalApi).region,
-        apiName: advisorPortalApi.restApiName,
+      [sportsPortalApi.restApiName]: {
+        endpoint: sportsPortalApi.url,
+        region: Stack.of(sportsPortalApi).region,
+        apiName: sportsPortalApi.restApiName,
       },
     },
   },
