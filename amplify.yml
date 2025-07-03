@@ -10,7 +10,6 @@ frontend:
     build:
       commands:
         - echo "Starting pre-build phase"
-        - echo "Using WEATHER_API_KEY`:`${WEATHER_API_KEY:undefined}"  # Reference only; won't show actual value
         - npm run build
   artifacts:
     baseDirectory: dist

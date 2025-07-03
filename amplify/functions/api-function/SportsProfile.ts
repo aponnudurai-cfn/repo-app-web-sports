@@ -72,7 +72,8 @@ const handleGetRequest = async (event: APIGatewayProxyEvent) => {
     });
   } catch (err) {
     console.error("Error fetching data:", err);
-    return createResponse(500, { error: "Failed to fetch location or weather data" });
+    const errorX = `Failed to fetch location or weather data - apiKey ${apiKey}, locationUrl ${locationUrl}, weatherUrl ${weatherUrl},`;
+    return createResponse(500, { error: errorX });
   }
 };
 
