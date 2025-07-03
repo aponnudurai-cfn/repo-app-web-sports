@@ -64,7 +64,7 @@ const handleGetRequest = async (event: APIGatewayProxyEvent) => {
 
     const { name, state, country } = location;
     const weather = await fetchWeatherData(name, state, country, apiKey);
-    const temperature = convertKelvinToFahrenheit(weather.main.temp);
+    const temperature = convertKelvinToFahrenheit(weather.main.temp).toFixed(2);
 
     return createResponse(200, {
       name,
