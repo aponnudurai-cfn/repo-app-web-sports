@@ -106,7 +106,7 @@ sportsPersonalizationResource.addMethod(
 );
 
 // create a new IAM policy to allow Invoke access to the API
-const sportsApiPolicy = new Policy(apiStack, "AdvisorApiPolicy", {
+const sportsApiPolicy = new Policy(apiStack, "SportsApiPolicy", {
   statements: [
     new PolicyStatement({
       actions: ["execute-api:Invoke"],
