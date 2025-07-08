@@ -14,64 +14,33 @@ const createResponse = (statusCode: number, body: object) => ({
   body: JSON.stringify(body),
 });
 
-// --- Utility: Kelvin to Fahrenheit ---
-const convertKelvinToFahrenheit = (kelvin: number) =>
-  ((kelvin - 273.15) * 9) / 5 + 32;
-
 // --- Fetch location ---
-const fetchLocationData = async (latitude: string, longitude: string, apiKey: string) => {
-  const url = `${process.env.Location_API_URL}?lat=${latitude}&lon=${longitude}&limit=1&appid=${apiKey}`;
-  console.log(`Location url - ${url}`)
+const fetchProfileData = async (emailAddress: string) => {
+  const url = `${process.env.People_API_URL}?email=${emailAddress}`;
+  console.log(`Profile url - ${url}`)
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Location API error: ${response.status}`);
   const data = await response.json();
   return Array.isArray(data) && data.length > 0 ? data[0] : null;
 };
 
-// --- Fetch weather ---
-const fetchWeatherData = async (name: string, state: string, country: string, apiKey: string) => {
-  const url = `${process.env.Weather_API_URL}?q=${encodeURIComponent(name)},${encodeURIComponent(state)},${encodeURIComponent(country)}&appid=${apiKey}`;
-  console.log(`Weather url - ${url}`)
- 
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`Weather API error: ${response.status}`);
-  return await response.json();
-};
+
 
 // --- Handle GET request --- 
 const handleGetRequest = async (event: APIGatewayProxyEvent) => {
-  const latitude = event.queryStringParameters?.latitude;
-  const longitude = event.queryStringParameters?.longitude;
-
-  if (!latitude || !longitude) {
-    return createResponse(400, { error: "Latitude and longitude are required" });
-  }
-
-  const apiKey = process.env.Weather_API_KEY;
-  const locationUrl = process.env.Location_API_URL;
-  const weatherUrl = process.env.Weather_API_URL;
-  console.log(`apiKey ${apiKey}, locationUrl ${locationUrl}, weatherUrl ${weatherUrl},`);
-
-  if (!apiKey || !locationUrl || !weatherUrl) {
-    return createResponse(500, { error: "Missing required environment variables"});
-  }
-
+  
   try {
-    const location = await fetchLocationData(latitude, longitude, apiKey);
-    if (!location) {
+    const profile = await fetchProfileData("aponnudurai@commonwealth.com");
+    if (!profile) {
       return createResponse(404, { error: "No location found for provided coordinates" });
     }
 
-    const { name, state, country } = location;
-    const weather = await fetchWeatherData(name, state, country, apiKey);
-    const temperature = convertKelvinToFahrenheit(weather.main.temp).toFixed(2);
-
+    const { FirstName, LastName, Description } = profile;
+   
     return createResponse(200, {
-      name,
-      state,
-      country,
-      temperature: `${temperature} °F`,
-      description: weather.weather?.[0]?.description || "No description",
+      FirstName,
+      LastName,
+      Description
     });
   } catch (err) {
     console.error("Error fetching data:", err);

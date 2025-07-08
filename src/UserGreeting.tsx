@@ -1,27 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import outputs from '../amplify_outputs.json';
 
-type WeatherProps = {
+type UserGreetingProps = {
     token: string;
 };
 
-const Weather: React.FC<WeatherProps> = ({ token }) => {
-    const [weather, setWeather] = useState<string | null>(null);
+const UserGreeting: React.FC<UserGreetingProps> = ({ token }) => {
+    const [greeting, setGreeting] = useState<string | null>(null);
     useEffect(() => {
-        async function getWeather() {
+        async function getGreeting() {
             if (token) {
                 try {
 
-                    const position = await new Promise<GeolocationPosition>((resolve, reject) =>
-                        navigator.geolocation.getCurrentPosition(resolve, reject)
-                    );
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-                    console.log(latitude);
-                    console.log(longitude);
+                   
                     const endpoint = outputs.custom.API.SportsPortalApi.endpoint;
                     const resource = 'SportsProfile'; // Adjust the path as needed
-                    const url = `${endpoint}${resource}/?latitude=${encodeURIComponent(latitude.toString())}&longitude=${longitude.toString()}`;
+                    const url = `${endpoint}${resource}`;
                     console.log('url', url);
                     console.log('cognito token', token);
                     
@@ -34,21 +28,21 @@ const Weather: React.FC<WeatherProps> = ({ token }) => {
 
                     const data = await response.json();
                     console.log('API response:', data);
-                    setWeather(`${data.name}, ${data.state}, ${data.country} is ${data.temperature}`); // assuming data contains name, state, and country
+                    setGreeting(`Welcome ${data.FirstName}, ${data.LastName}`); // assuming data contains name, state, and country
                 } catch (error) {
                     console.error("API call failed:", error);
-                    setWeather("API call failed");
+                    setGreeting("API call failed");
                 }
             }
         }
-        getWeather();
+        getGreeting();
     }, [token]); // dependency added
-    if (!weather) return <div>Loading weather...</div>;
+    if (!greeting) return <div>Loading ...</div>;
     return (
         <div>
-            <h2>Weather in {weather}</h2>
+            <h2>{greeting}</h2>
         </div>
     );
 };
 
-export default Weather;
+export default UserGreeting;
