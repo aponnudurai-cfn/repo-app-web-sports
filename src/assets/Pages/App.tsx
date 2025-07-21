@@ -1,11 +1,11 @@
 //https://docs.amplify.aws/react/build-a-backend/add-aws-services/rest-api/set-up-rest-api/
 import { useEffect, useState } from "react";
-import type { Schema } from "../amplify/data/resource";
+import type { Schema } from "../../../amplify/data/resource";
 import { useAuthenticator } from '@aws-amplify/ui-react-core';
 import { generateClient } from "aws-amplify/data";
 import { fetchAuthSession } from 'aws-amplify/auth';
-import outputs from '../amplify_outputs.json';
-import UserGreeting from "./UserGreeting";
+import outputs from '../../../amplify_outputs.json';
+import UserGreeting from "../../UserGreeting";
 
 const client = generateClient<Schema>();
 
