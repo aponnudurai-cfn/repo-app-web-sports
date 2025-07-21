@@ -10,12 +10,16 @@ export default function SubmitRating() {
     const [ratings, setRatings] = useState<Schema["Rating"]["type"][]>([]);
 
     const fetchRatings = async () => {
-        try {
+        const response = client.models.Rating.observeQuery().subscribe({
+            next: (data) => setRatings([...data.items]),
+        });
+        return () => response.unsubscribe();
+        /*try {
             const response = await client.models.Rating.list();
             setRatings(response.data ?? []);
         } catch (error) {
             console.error("Error fetching ratings:", error);
-        }
+        }*/
     };
 
     useEffect(() => {
