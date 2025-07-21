@@ -1,5 +1,5 @@
 import type { Schema } from "../../../amplify/data/resource";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/api";
 
 
@@ -7,8 +7,20 @@ import { generateClient } from "aws-amplify/api";
 const client = generateClient<Schema>();
 
 export default function SubmitRating() {
-    const [rating, setRating] = useState('');
-    const [subject, setSubject] = useState('');
+    const [ratings, setRatings] = useState<Schema["Rating"]["type"][]>([]);
+
+    const fetchRatings = async () => {
+        try {
+            const response = await client.models.Rating.list();
+            setRatings(response.data ?? []);
+        } catch (error) {
+            console.error("Error fetching ratings:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchRatings();
+    }, []);
 
     const submitRating = async () => {
         try {
@@ -29,8 +41,7 @@ export default function SubmitRating() {
                 Rank: parseInt(rating, 10)
             });
             console.log('Rating submitted:', response);
-            setRating('');
-            setSubject('');
+            fetchRatings(); // Refresh the list after submitting
         } catch (error) {
             console.error('Error submitting rating:', error);
         }
@@ -38,18 +49,13 @@ export default function SubmitRating() {
 
     return <div>
         <h2>Submit Rating</h2>
-        <input
-            type="text"
-            placeholder="Subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-        />
-        <input
-            type="number"
-            placeholder="Rating (1-5)"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
-        />
         <button onClick={submitRating}>Create Rating</button>
+        <ul>
+            {ratings.map((rating) => (
+                <li key={rating.id}>
+                    {rating.Subject} - {rating.Rank}
+                </li>
+            ))}
+        </ul>
     </div>
 }
