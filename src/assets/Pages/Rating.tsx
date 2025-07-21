@@ -1,8 +1,10 @@
+import type { Schema } from "../../../amplify/data/resource";
 import { useState } from "react";
 import { generateClient } from "aws-amplify/api";
 
 
-const client = generateClient();
+
+const client = generateClient<Schema>();
 
 export default function SubmitRating() {
     const [rating, setRating] = useState('');
