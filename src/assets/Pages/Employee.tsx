@@ -4,9 +4,9 @@ import { generateClient } from "aws-amplify/api";
 
 type EmployeeWithDepartment = {
   employeeId: string;
-  firstName?: string;
-  lastName?: string;
-  department?: {
+  firstName: string;
+  lastName: string;
+  department: {
     departmentId: string;
     groupName: string;
   };
@@ -23,7 +23,7 @@ export default function Employee() {
       'employeeId',
       'firstName',
       'lastName',
-      /*'department { departmentId,groupName }',*/
+      'department { groupName }',
     ],
   });
         setEmployees(response.data ?? []); 
