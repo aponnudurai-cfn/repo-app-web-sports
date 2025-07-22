@@ -40,9 +40,13 @@ export default function SubmitRating() {
                 console.error("Rating must be a number between 1 and 5.");
                 return;
             }
+
+            
             const response = await client.models.Rating.create({
                 Subject: subject,
-                Rank: parseInt(rating, 10)
+                Rank: parseInt(rating, 10),
+                professorId: window.prompt("Enter the professor ID:"),
+
             });
             console.log('Rating submitted:', response);
             fetchRatings(); // Refresh the list after submitting
