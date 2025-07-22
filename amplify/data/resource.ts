@@ -12,7 +12,7 @@ const schema = a.schema({
       branchId: a.id().required(),
       unitId: a.id().required(),
       groupName: a.string().required(),
-      members: a.hasMany("Staff", "staffId"),
+      members: a.hasMany("Staff", "branchId"),
     }).secondaryIndexes((index) => [
       index("unitId")
       .sortKeys(["groupName"])
