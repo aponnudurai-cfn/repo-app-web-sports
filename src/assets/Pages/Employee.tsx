@@ -23,7 +23,7 @@ export default function Employee() {
       'employeeId',
       'firstName',
       'lastName',
-      'department { departmentId groupName }',
+      /*'department { departmentId,groupName }',*/
     ],
   });
         setEmployees(response.data ?? []); 
@@ -39,7 +39,7 @@ export default function Employee() {
         <ul>
             {employees.map((employee) => (
                 <li key={employee.employeeId}>
-                    {employee.firstName} {employee.lastName} - {employee.department.groupName}
+                    {employee.firstName} {employee.lastName}
                 </li>
             ))}
         </ul>
