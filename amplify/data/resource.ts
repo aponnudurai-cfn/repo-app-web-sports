@@ -34,9 +34,13 @@ const schema = a.schema({
     .model({
       professorId: a.id().required(),
       Subject: a.string(),
-      Rank: a.integer(),
+      Year: a.integer(),
+      Semester: a.string(),
+      Ranking: a.integer(),
     }).secondaryIndexes((index) => [
-      index("professorId").sortKeys(["Subject", "Rank"])
+      index("professorId").sortKeys(["Subject", "Year","Semester","Ranking"]),
+      index("Subject").sortKeys(["Year", "Semester", "Ranking"]),
+      index("Year").sortKeys(["Semester", "Ranking"]),
   ]),
   Customer: a
       .model({
