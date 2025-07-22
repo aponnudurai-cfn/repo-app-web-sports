@@ -41,12 +41,10 @@ export default function SubmitRating() {
                 return;
             }
 
-            
-            const response = await client.models.Rating.create({
+             const response = await client.models.Rating.create({
                 Subject: subject,
                 Rank: parseInt(rating, 10),
-                professorId: window.prompt("Enter the professor ID:"),
-
+                professorId: crypto.randomUUID(),
             });
             console.log('Rating submitted:', response);
             fetchRatings(); // Refresh the list after submitting
