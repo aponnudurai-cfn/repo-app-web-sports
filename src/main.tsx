@@ -6,7 +6,7 @@ import { Amplify } from "aws-amplify";
 import { parseAmplifyConfig } from "aws-amplify/utils";
 import outputs from "../amplify_outputs.json";
 import '@aws-amplify/ui-react/styles.css';
-import Rating from "./assets/Pages/Rating.tsx";
+import Employee from "./assets/Pages/Employee";
 
 const amplifyConfig = parseAmplifyConfig(outputs);
 
@@ -23,6 +23,6 @@ Amplify.configure(outputs);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Authenticator><Rating /></Authenticator>
+    <Authenticator><Employee /></Authenticator>
   </React.StrictMode>
 );

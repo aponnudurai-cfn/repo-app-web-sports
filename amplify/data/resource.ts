@@ -17,8 +17,9 @@ const schema = a.schema({
     }).identifier(["employeeId"]),
   Department: a 
     .model({
-      employees: a.hasMany("Employee", "departmentId"),
+      departmentId: a.id().required(),
       groupName: a.string().required(),
+      employees: a.hasMany("Employee", "departmentId"),
     }).secondaryIndexes((index) => [
       index("groupName")]),  
   Todo: a
