@@ -7,6 +7,20 @@ specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
+  Employee: a 
+    .model({
+      employeeId: a.id().required(),
+      firstName: a.string().required(),   
+      lastName: a.string().required(),
+      departmentId: a.id().required(),
+      department: a.belongsTo("Department", "departmentId"),
+    }).identifier(["employeeId"]),
+  Department: a 
+    .model({
+      employees: a.hasMany("Employee", "departmentId"),
+      groupName: a.string().required(),
+    }).secondaryIndexes((index) => [
+      index("groupName")]),  
   Todo: a
     .model({
       content: a.string(),
