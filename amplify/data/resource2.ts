@@ -1,6 +1,6 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 
-const schema = a
+const customerSchema = a
   .schema({
     Customer: a
       .model({
@@ -32,10 +32,10 @@ const schema = a
   })
   .authorization((allow) => [allow.publicApiKey()]);
 
-export type Schema = ClientSchema<typeof schema>;
+export type Schema = ClientSchema<typeof customerSchema>;
 
 export const data = defineData({
-  schema,
+  customerSchema,
   authorizationModes: {
     defaultAuthorizationMode: "apiKey",
     apiKeyAuthorizationMode: {
