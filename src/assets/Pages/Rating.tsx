@@ -6,7 +6,7 @@ import { generateClient } from "aws-amplify/api";
 
 const client = generateClient<Schema>();
 
-export default function SubmitRating() {
+export function Rating() {
     const [ratings, setRatings] = useState<Schema["Rating"]["type"][]>([]);
 
     const fetchRatings = async () => {
@@ -65,3 +65,4 @@ export default function SubmitRating() {
         </ul>
     </div>
 }
+

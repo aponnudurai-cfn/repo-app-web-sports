@@ -8,8 +8,7 @@ import outputs from "../amplify_outputs.json";
 import '@aws-amplify/ui-react/styles.css';
 /*import Employee from "./assets/Pages/Employee";*/
 /*import App from "./assets/Pages/App";*/
-import { Rating } from "@aws-amplify/ui-react";
-
+import {Rating} from "./assets/Pages/Rating";
 
 const amplifyConfig = parseAmplifyConfig(outputs);
 
