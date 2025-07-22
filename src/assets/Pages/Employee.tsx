@@ -2,15 +2,15 @@ import type { Schema } from "../../../amplify/data/resource";
 import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/api";
 
-type EmployeeWithDepartment = {
-  employeeId: string;
-  firstName: string;
-  lastName: string;
-  department: {
-    departmentId: string;
-    groupName: string;
-  };
+type EmployeeWithDepartment =  {
+    employeeId: string;
+    firstName: string;
+    lastName: string;
+    department: {
+        groupName: string;
+    };
 };
+
 
 const client = generateClient<Schema>();
 
@@ -23,7 +23,7 @@ export default function Employee() {
       'employeeId',
       'firstName',
       'lastName',
-      'department { groupName }',
+      'department.groupName',
     ],
   });
         setEmployees(response.data ?? []); 
