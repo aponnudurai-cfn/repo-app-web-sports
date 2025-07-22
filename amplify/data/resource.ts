@@ -1,4 +1,5 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { SortKeyStep } from "aws-cdk-lib/aws-appsync";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -32,9 +33,12 @@ const schema = a.schema({
     }),
   Rating: a
     .model({
+      professorId: a.id().required(),
       Subject: a.string(),
-      Rank: a.integer()
-    }),
+      Rank: a.integer(),
+    }).secondaryIndexes((index) => [
+      index("professorId")
+  ]),
   Customer: a
       .model({
         customerId: a.id().required(),

@@ -77,7 +77,8 @@ function App() {
   }, [idToken]);
 
   function createTodo() {
-    client.models.Todo.create({ content: window.prompt("Todo content") });
+    client.models.Todo.create({ content: window.prompt("Todo content"), 
+      isDone: window.prompt("Is it done? (true/false)") === "true" });
   }
 
   return (
